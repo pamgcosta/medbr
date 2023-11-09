@@ -1,0 +1,11 @@
+*.csv
+*.html
+*.shp
+*.cpg
+*.dbf
+*.prj
+*.shx
+*.Identifier
+*.zip
+*.pyc
+*.json

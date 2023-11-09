@@ -12,7 +12,7 @@ from folium.plugins import HeatMapWithTime
 
 DATAPATH = 'medbr/data/plancoverage/transformed/plancoverage.csv'
 
-def plancoverage(cities_code=None, start_at=None, end_at=None):
+def plancoverage(cities_code=None):
     
     data = pd.read_csv(DATAPATH, sep=';')
     
@@ -26,8 +26,11 @@ def plancoverage(cities_code=None, start_at=None, end_at=None):
     data = pd.merge(data, cities, how='inner', on='city_code')
 
 
-    data
-    data = data.groupby('id').sum('count')
+    data.city_code = data.city_code.astype(str)
+    data = data[['city_code', 'count']]
+
+    data = data.groupby('city_code').sum('count').reset_index()
+    data = data.set_index('city_code')['count']
 
     return colormap_create(data)
 

@@ -43,5 +43,5 @@ The syntax of all `medbr` functions operates on the same logic, making it intuit
 |`medbr.plancoverage(state, provider)`| Complementary Health | Plots the cities where the providers have coverage. Parameterize the state (default: Brazil) and the provider (default: all) | Open Data Portal |
 |`medbr.beneficiaries(state, provider)`| Complementary Health | Plot the intensity map by city according to the concentration of beneficiaries. Parameterize the state (default: Brazil) and the provider (default: all) | Open Data Portal |
 
-# Contributing to geobr
+# Contributing to medbr
 If you would like to contribute to medbr and add new functions or data sets, please check this [guide](https://) to propose your contribution.

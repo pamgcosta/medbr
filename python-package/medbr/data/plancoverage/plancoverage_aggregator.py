@@ -13,7 +13,4 @@ df = df.rename(columns={
     "ID_PLANO": "count"
 })
 
-if os.path.exists(agg_file):
-    df.to_csv(agg_file, index=False, sep=';', mode='a', header=False)
-else:
-    df.to_csv(agg_file, index=False, sep=';')
+df.to_csv(agg_file, index=False, sep=';')

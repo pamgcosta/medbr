@@ -7,7 +7,7 @@ import functools
 import numpy as np
 
 
-from medbr.utils import remove_nil, get_city
+from medbr.utils import remove_nil, get_cities
 from folium.plugins import HeatMapWithTime
 
 DATAPATH = 'medbr/data/birth/transformed/birth.csv'
@@ -25,7 +25,7 @@ def birth(cities_code=None, start_at=None, end_at=None):
         raise ValueError("No data found.")
 
 
-    cities = get_city(city_code=cities_code)
+    cities = get_cities(city_code=cities_code)
     data = pd.merge(data, cities, how='inner', on='city_code')
 
     time_index = list(data['birth_date'].sort_values().astype('str').unique())

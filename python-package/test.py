@@ -1,5 +1,5 @@
 import webbrowser
-from medbr import facilities, mortality, birth
+from medbr import facilities, mortality, birth, plancoverage
 
 
 facilities(city=355030).save('facilities.html')
@@ -20,5 +20,5 @@ webbrowser.open('covid_machine.html')
 mortality(start_at='2021-01-01', end_at='2022-01-01').save('mortality.html')
 webbrowser.open('mortality.html')
 
-plancoverage(city=355030).save('plancoverage.html')
+plancoverage(ufs=['SP', 'RJ']).save('plancoverage.html')
 webbrowser.open('plancoverage.html')

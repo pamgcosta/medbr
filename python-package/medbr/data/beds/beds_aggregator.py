@@ -3,20 +3,13 @@ import pandas as pd
 
 agg_file = 'medbr/data/beds/transformed/beds.csv'
 
-for year in ['2023']:
-    
-    df = pd.read_csv(f'medbr/data/beds/raw/data_{year}.csv', encoding='latin-1')
-    
-    df['DTNASC'] = pd.to_datetime(df['DTNASC'], format='%d%m%Y')
-    df = df[['CODMUNNASC', 'DTNASC', 'HORANASC']].groupby(['CODMUNNASC', 'DTNASC']).count().reset_index()
+df = pd.read_csv(f'medbr/data/beds/raw/data_2023.csv', encoding='latin-1')
 
-    df = df.rename(columns={
-        "CODMUNNASC": "city_code",
-        "DTNASC": "beds_date",
-        "HORANASC": "beds_count"
-    })
+df = df[['UF', 'LEITOS_EXISTENTES']].groupby(['UF']).sum('LEITOS_EXISTENTES').reset_index()
 
-    if os.path.exists(agg_file):
-        df.to_csv(agg_file, index=False, sep=';', mode='a', header=False)
-    else:
-        df.to_csv(agg_file, index=False, sep=';')
+df = df.rename(columns={
+    "UF": "uf",
+    "LEITOS_EXISTENTES": "beds_count"
+})
+
+df.to_csv(agg_file, index=False, sep=';')

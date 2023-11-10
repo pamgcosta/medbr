@@ -2,6 +2,7 @@ from urllib.error import HTTPError
 import requests
 import folium
 import pandas as pd
+import geopandas as gpd
 
 def uri_request(uris, params, request_type='get', auth=None):
     """Request a uri and return a file-like object."""
@@ -37,7 +38,7 @@ def remove_nil(data: dict):
 def map_create(data, endpoint, city_name=None, city_code=None, location=None, **kwargs):
     
     if city_name is not None and city_code is not None:
-        city = get_city(city_name=city_name, city_code=city_code)
+        city = get_cities(city_name=city_name, city_code=city_code)
         centroid = city['geometry'].iloc[0].centroid
         location = [centroid.y, centroid.x]
         
@@ -52,14 +53,15 @@ def map_create(data, endpoint, city_name=None, city_code=None, location=None, **
     
     return m
 
-def get_city(city_name=None, city_code=None):
-    import geopandas as gpd
+def get_cities(ufs=None, city_name=None, city_code=None):
 
     cities = gpd.read_file('medbr/data/cities/transformed/cities.shp')
     if city_name is not None:
         city = cities[cities['city_name'].isin(city_name)]
     elif city_code is not None:
         city = cities[cities['city_code'].isin(city_code)]
+    elif ufs is not None:
+        city = cities[cities['uf'].isin(ufs)]
     else:
         return cities # return all mo
     
@@ -67,16 +69,17 @@ def get_city(city_name=None, city_code=None):
     return city
 
 
-def colormap_create(data):
+def colormap_create(data, ufs):
     from branca.colormap import linear
 
-    br_estados = 'medbr/data/cities/raw/br_states.json'
-    geo_json_data = json.load(open(br_estados))
-
     cities = gpd.read_file('medbr/data/cities/transformed/cities.shp')
+    cities['city_code'] = cities['city_code'].astype(str)
     cities = cities.set_index('city_code')
+    cities = cities[cities['uf'].isin(ufs)]
 
     colormap = linear.YlOrRd_09.scale(data.min(), data.max())
+
+    cities = pd.merge(cities, data, how='inner', left_index=True, right_index=True)
 
     m = folium.Map(location=[48,-102],
                 tiles='cartodbpositron',#'cartodbpositron', stamentoner
@@ -87,7 +90,31 @@ def colormap_create(data):
         cities.to_json(),
         name='count',
         style_function=lambda feature: {
-            'fillColor': colormap(data[feature['city_code']]),
+            'fillColor': colormap(data[feature['id']]),
+            'color': 'black',
+            'weight': 0.3,
+    }).add_to(m)
+
+    return m
+
+def colormap_create_uf(data):
+    from branca.colormap import linear
+
+    states = 'medbr/data/cities/raw/br_states.json'
+    geo_json_data = json.load(open(states))
+
+    colormap = linear.YlOrRd_09.scale(data.min(), data.max())
+
+    m = folium.Map(location=[48,-102],
+                tiles='cartodbpositron',#'cartodbpositron', stamentoner
+                zoom_start=3,
+                control_scale=True)
+
+    folium.GeoJson(
+        geo_json_data,
+        name='count',
+        style_function=lambda feature: {
+            'fillColor': colormap(data[feature['id']]),
             'color': 'black',
             'weight': 0.3,
     }).add_to(m)

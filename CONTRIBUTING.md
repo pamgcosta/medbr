@@ -1,4 +1,4 @@
-# Become a contributor to **medbr** <img align="right" src="https://github.com/pamgcosta/medbr/assets/66846949/1b41fbff-d684-42b4-8335-de686e613822)" alt="logo" width="170"> <img align="right" src="r-package/man/figures/geobr_logo_y.png" alt="logo" width="170">
+# Become a contributor to **medbr**
 
 If you would like to contribute to **medbr**, the first thing to do is to open a [Github issue](https:) with your suggestion of ***function*** or ***dataset*** you would like to see in the package. Keep in mind that, as a rule, the package only includes geospatial data sets with national spatial coverage that are created/managed by govermental institutions and which are publicly available.
 

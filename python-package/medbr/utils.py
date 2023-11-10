@@ -3,6 +3,7 @@ import requests
 import folium
 import pandas as pd
 import geopandas as gpd
+import json
 
 def uri_request(uris, params, request_type='get', auth=None):
     """Request a uri and return a file-like object."""
